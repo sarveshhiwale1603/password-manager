@@ -1,0 +1,61 @@
+.auth-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-width: 100%;
+    min-height: 100vh;
+}
+.auth-wrapper > div {
+    z-index: 5;
+}
+.bg-primary {
+    background: linear-gradient(141.55deg, #6fd943 3.46%, #6fd943 99.86%), #6fd943 !important;
+}
+.auth-wrapper.auth-v3 .bg-auth-side {
+    content: "";
+    top: 20px;
+    left: 50%;
+    right: 20px;
+    bottom: 20px;
+    border-radius: 20px;
+    position: absolute;
+}
+.auth-wrapper .auth-content {
+    width: 75vw;
+    min-height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.auth-wrapper .auth-content {
+    position: relative;
+    padding: 15px;
+    z-index: 5;
+}
+.auth-wrapper .card {
+    margin-bottom: 0;
+    padding: 8px;
+}
+.auth-wrapper .auth-content .card {
+    overflow: hidden;
+    padding: 0;
+    box-shadow: none;
+    background: transparent;
+}
+.auth-wrapper .auth-content .img-card-side {
+    position: relative;
+    padding: 0;
+}
+.auth-wrapper .auth-content .card .auth-img-content {
+    margin: 0 0 0 auto;
+    width: 400px;
+    max-width: 100%;
+}
+@media only screen and (max-width: 1199px){
+.auth-wrapper .bg-auth-side, .auth-wrapper .auth-img-content, .auth-wrapper .auth-footer {
+    display: none;
+}
+}

@@ -1,3 +1,8 @@
+<?php
+session_start();
+include("include/config.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -86,12 +91,12 @@
                   <div class="theme-avtar bg-success">
                     <i class="fa fa-user-alt"></i>
                   </div>
-                  <p class="text-muted text-m mt-4 mb-4">New Leads</p>
+                  <p class="text-muted text-m mt-4 mb-4">Companies</p>
                   <!-- <?php
-                                                $query=mysqli_query($conn,"select * from lead where status_deal='Open' and Firm_Name='$id'");
+                                                $query=mysqli_query($conn,"select * from companies");
                                                  $count1=mysqli_num_rows($query);
                                                   ?> -->
-                  <h3 class="mb-0">3</h3>
+                  <h3 class="mb-0"><?php echo $count1; ?></h3>
                 </div>
               </div>
             </div>
@@ -105,14 +110,12 @@
                   <div class="theme-avtar bg-info">
                     <i class="fa fa-user-alt"></i>
                   </div>
-                  <p class="text-muted text-m mt-4 mb-4">Total Leads</p>
-                  <!-- <?php
-                                                $query=mysqli_query($conn,"select * from lead where Firm_Name='$id'");
+                  <p class="text-muted text-m mt-4 mb-4">Companies</p>
+                <?php
+                                                $query=mysqli_query($conn,"select * from companies");
                                                 $count1=mysqli_num_rows($query);
-                                                 ?> -->
-                  <h3 class="mb-0">
-                    <?php echo $count1; ?>
-                    </?php>
+                                                 ?>
+                 <h3 class="mb-0"><?php echo $count1; ?></h3>
                 </div>
               </div>
             </div>
@@ -127,14 +130,12 @@
                   <div class="theme-avtar bg-warning">
                     <i class="fa fa-user-alt"></i>
                   </div>
-                  <p class="text-muted text-m mt-4 mb-4">Closed Leads</p>
-                  <!-- <?php
-                                                  $query=mysqli_query($conn,"select * from lead where status_deal='Closed' and Firm_Name='$id'");
-                                                  $count1=mysqli_num_rows($query);
-                                           ?> -->
-                  <h3 class="mb-0">
-                    <?php echo $count1; ?>
-                  </h3>
+                  <p class="text-muted text-m mt-4 mb-4">Companies</p>
+                <?php
+                                                $query=mysqli_query($conn,"select * from companies");
+                                                $count1=mysqli_num_rows($query);
+                                                 ?>
+                 <h3 class="mb-0"><?php echo $count1; ?></h3>
                 </div>
               </div>
             </div>
@@ -148,10 +149,12 @@
                   <div class="theme-avtar bg-danger">
                     <i class="fa fa-user-alt"></i>
                   </div>
-                  <p class="text-muted text-m mt-4 mb-4">Total Booked</p>
-                  <h3 class="mb-0">
-                    <!-- <?php echo $leadBookedFetch; ?> -->
-                  </h3>
+                  <p class="text-muted text-m mt-4 mb-4">Companies</p>
+                <?php
+                                                $query=mysqli_query($conn,"select * from companies");
+                                                $count1=mysqli_num_rows($query);
+                                                 ?>
+                 <h3 class="mb-0"><?php echo $count1; ?></h3>
                 </div>
               </div>
             </div>

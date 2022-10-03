@@ -36,12 +36,29 @@ $page=substr($_SERVER['SCRIPT_NAME'],strrpos($_SERVER['SCRIPT_NAME'],"/")+1);
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="account-category.php"
+                        class="nav-link <?= $page == 'account-category.php' ? 'active':'' ?>">
+                        <div class="dash-micon mr-1 shadow">
+                            <!-- <i class="nav-icon fas fa-th"></i> -->
+                            <i class='nav-icon bx bx-table'></i>
+                        </div>
+                        <p>Account Category</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="changepassword.php" class="nav-link <?= $page == 'changepassword.php' ? 'active':'' ?>">
                         <div class="dash-micon mr-1 shadow">
-                            <!-- <i class="nav-icon fas fa-solid fa-key"></i> -->
                             <i class='nav-icon bx bx-key'></i>
                         </div>
                         <p>Change Password</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="universalChangePassword.php" class="nav-link <?= $page == 'universalChangePassword.php' ? 'active':'' ?>">
+                        <div class="dash-micon mr-1 shadow">
+                            <i class='nav-icon bx bx-key'></i>
+                        </div>
+                        <p>Universal Password</p>
                     </a>
                 </li>
             </ul>

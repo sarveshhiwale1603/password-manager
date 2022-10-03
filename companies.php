@@ -1,3 +1,66 @@
+<?php
+  
+  session_start();
+
+include("include/config.php");
+if(isset($_POST['submit1'])){
+    
+    $company_name=$_POST['company_name'];
+    $contact_person=$_POST['contact_person'];
+    $mobile_no=$_POST['mobile_no'];
+    $whatsapp_no=$_POST['whatsapp_no'];
+    $GST_no=$_POST['GST_no'];
+    $PAN_no=$_POST['PAN_no'];
+
+
+
+    $sql=mysqli_query($conn,"INSERT INTO `companies`(`company_name`,`contact_person`,`mobile_no`,`whatsapp_no`,`GST_no`,`PAN_no`) VALUES ('$company_name','$contact_person','$mobile_no','$whatsapp_no','$GST_no','$PAN_no')");
+     if($sql==1){
+        echo"<script>alert('new record has been added succesfully!');php</script>";
+     }
+     else{
+        echo"<script>alert('connection failed!');</script>";
+     }
+}
+
+
+
+
+if(isset($_POST['cusEdit'])){
+    $id=$_POST['id'];
+    $company_name=$_POST['company_name'];
+    $contact_person=$_POST['contact_person'];
+    $mobile_no=$_POST['mobile_no'];
+    $whatsapp_no=$_POST['whatsapp_no'];
+    $GST_no=$_POST['GST_no'];
+    $PAN_no=$_POST['PAN_no'];
+    // $status='available';
+    // $type1=$_POST['typeUpdate'];
+
+
+   
+   
+    $sql="UPDATE `companies` SET `company_name`='$company_name',`contact_person`='$contact_person',`mobile_no`='$mobile_no',`whatsapp_no`='$whatsapp_no',`GST_no`='$GST_no',`PAN_no`='$PAN_no' WHERE id='$id.'";
+
+    if (mysqli_query($conn, $sql)){
+      header("location:companies.php");
+   } else {
+      echo "<script> alert('connection failed !'); window.location.href = 'companies.php'</script>";
+   }
+  }
+
+  if(isset($_GET['delid'])){
+    $id=mysqli_real_escape_string($conn,$_GET['delid']);
+    $sql=mysqli_query($conn,"delete from companies where id='$id'");
+    if($sql=1){
+        header("location:companies.php");
+    }
+    }
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,36 +143,72 @@
                 <div class="container-fluid">
                     <!-- Small boxes (Stat box) -->
                     <div class="row" id="leads">
-
-                        <div class="col-md-3 col-sm-6 col-md-3">
-                            <div class="card text-white text-center">
+                        <?php
+                                            $sql=mysqli_query($conn,"select * from companies");
+                                            $count=1;
+                                            while ($row=mysqli_fetch_array($sql)){ 
+                                        ?>
+                        <div class="col-md-3 col-sm-6 col-md-3 my-3">
+                            <div class="card text-white text-center h-100">
                                 <div class="card-header border-0 pb-0">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-grid">
-                                            <!-- <div class="badge bg-success p-2 px-3 rounded">Employee
-                                            </div> -->
+                                    <div class="row align-items-center">
+                                        <div class="col-1 offset-10">
+                                            <div class="p-2 px-3">
+                                                <div class="dropdown">
+                                                    <a class="" href="#" role="button"
+                                                        id="dropdownMenuLink" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fa fa-ellipsis-v text-dark"
+                                                    aria-hidden="true"></i>
+                                                    </a>
+
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                    <button type="button" data-id="<?php echo $row['id'] ?>"
+                                                        class="dropdown-item view" href="" data-bs-toggle="modal"
+                                                        data-bs-target="#addNewCard">
+                                                        <i class="far fa-eye" style="font-size:17px;"></i> View
+                                                    </button>
+                                                    
+
+                                                    <a type="button" data-id="<?php echo $row['id'] ?>"
+                                                        class="dropdown-item edit" data-bs-toggle="modal" href="#"
+                                                        data-bs-target="#edit">
+                                                        <i class="far fa-edit" style="font-size:17px; style="></i> Edit</a>
+
+                                                        <a class="dropdown-item" href="companies.php?delid=<?php echo $row['id']; ?>"
+                                                            type="button"><i class="fa fa-trash-alt text-dark"
+                                                    aria-hidden="true"></i> Delete</a>
+
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="card-body">
-                                    <a href="company-details.php" target="_blank">
+                                
+                                    <a href="company-details.php?id=<?php echo $row['id']; ?>">
                                         <img alt="user-image" class="img-fluid rounded-circle card-avatar"
                                             src="dist/img/user1-128x128.jpg" style="height:100px;width:100px;">
                                     </a>
-                                    <h4 class="mt-4"><a href="company-details.php" style="color:#6fd943;">User NAME</a>
+                                    <h4 class="mt-4"><a href="company-details.php?id=<?php echo $row['id']; ?>"
+                                            style="color:#6fd943;">
+                                            <?php echo $row['company_name']; ?>
+                                        </a>
                                     </h4>
                                     <!-- <h6 class="text-dark mb-0 mb-4">user@example.com</h6> -->
                                 </div>
                             </div>
                         </div>
+                        <?php } ?>
 
 
 
                         <!-- ADD NEW USER -->
-                        <div class="col-md-3">
-                            <a href="#" class="btn-addnew-project" data-toggle="modal" data-target="#modal-default"
-                                data-placement="top" title="Create User">
+                        <div class="col-md-3 my-3">
+                            <a href="#" class="btn-addnew-project  h-100" data-toggle="modal"
+                                data-target="#modal-default" data-placement="top" title="Create User">
                                 <div class="bg-success proj-add-icon">
                                     <i class="bx bx-plus"></i>
                                 </div>
@@ -125,6 +224,51 @@
         </div>
         <!-- /.content-wrapper -->
 
+                  <!-- view customer -->
+                  <div class="modal fade" id="addNewCard" tabindex="-1" aria-labelledby="addNewCardTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                        <h4 class="modal-title">View Company Details</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                        <div class="modal-body px-sm-5 mx-50 pb-5 body">
+
+                        </div>
+
+                
+
+                </div>
+            </div>
+        </div>
+        <!--/ view customer -->
+
+        <!-- edit customer -->
+        <div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="addNewCardTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                        <h4 class="modal-title">Edit Company Details</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="addNewCardValidation" class="row gy-1 gx-2 mt-75" action="" method="post">
+
+                        <div class="modal-body px-sm-5 mx-50 pb-5 body1">
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <!--/ Edit customer -->
+
         <div class="modal fade" id="modal-default">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -134,35 +278,40 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-6 form-group">
-                                <label class="col-form-label" for="name">Name</label>
-                                <input type="text" class="form-control" id="name" name="name" required="">
-                            </div>
-                            <div class="col-6 form-group">
-                                <label class="col-form-label" for="email">E-Mail Address</label>
-                                <input type="email" class="form-control" id="email" name="email" required="">
-                            </div>
-                            <div class="col-6 form-group">
-                                <label class="col-form-label" for="phone">Phone</label>
-                                <input type="tel" class="form-control" maxlength="10" id="phone" name="phone"
-                                    required="">
-                            </div>
-                            <div class="col-6 form-group">
-                                <label class="col-form-label" for="job_title">Contact Person Name</label>
-                                <input type="text" class="form-control" id="job_title" name="job_title">
-                            </div>
-                            <div class="col-6 form-group">
-                                <label class="col-form-label" for="logo">Logo</label>
-                                <input type="file" class="form-control" id="logo" name="logo">
+                    <form method="post">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-6 form-group">
+                                    <label class="col-form-label" for="name">Company Name</label>
+                                    <input type="text" class="form-control" name="company_name" required="">
+                                </div>
+                                <div class="col-6 form-group">
+                                    <label class="col-form-label" for="email">Contact Person</label>
+                                    <input type="text" class="form-control" name="contact_person" required="">
+                                </div>
+                                <div class="col-6 form-group">
+                                    <label class="col-form-label" for="phone">Mobile No</label>
+                                    <input type="tel" class="form-control" maxlength="10" name="mobile_no" required="">
+                                </div>
+                                <div class="col-6 form-group">
+                                    <label class="col-form-label" for="job_title">Whatsapp No</label>
+                                    <input type="text" class="form-control" name="whatsapp_no">
+                                </div>
+                                <div class="col-6 form-group">
+                                    <label class="col-form-label" for="job_title">GST No</label>
+                                    <input type="text" class="form-control" name="GST_no">
+                                </div>
+                                <div class="col-6 form-group">
+                                    <label class="col-form-label" for="job_title">PAN No</label>
+                                    <input type="text" class="form-control" name="PAN_no">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer justify-content-end">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Create</button>
-                    </div>
+                        <div class="modal-footer justify-content-end">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="submit1">Submit</button>
+                        </div>
+                    </form>
                 </div>
                 <!-- /.modal-content -->
             </div>
@@ -172,11 +321,7 @@
         <?php include"include/footer.php";?>
 
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
-        <!-- /.control-sidebar -->
+
     </div>
     <!-- ./wrapper -->
 
@@ -186,7 +331,7 @@
     <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
-    $.widget.bridge('uibutton', $.ui.button)
+        $.widget.bridge('uibutton', $.ui.button)
     </script>
     <!-- Bootstrap 4 -->
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -215,6 +360,50 @@
     <script src="plugins/select2/js/select2.full.min.js"></script>
     <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+
+    <script>
+        $(document).ready(function () {
+            $('.view').click(function () {
+                let dnk = $(this).data('id');
+
+                $.ajax({
+                    url: 'cus.php',
+                    type: 'post',
+                    data: {
+                        dnk: dnk
+                    },
+                    success: function (response2) {
+                        $('.body').html(response2);
+                        $('#addNewCard').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('.edit').click(function () {
+                let dnkk = $(this).data('id');
+
+                $.ajax({
+                    url: 'cus.php',
+                    type: 'post',
+                    data: {
+                        dnkk: dnkk
+                    },
+                    success: function (response1) {
+                        $('.body1').html(response1);
+                        $('#editmodal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+
 
 </body>
 

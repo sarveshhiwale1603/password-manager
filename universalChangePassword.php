@@ -1,43 +1,48 @@
 <?php
-
 session_start();
+if(!isset($_SESSION['admin']) == 1) // If session is not set then redirect to Login Page
+{
+// header("Location:dashboard.php"); 
+}
+if(!isset($_SESSION['id'])) 
+{
+ header("Location:login.php"); 
+}
 include("config.php");
+$id=$_SESSION['id'];
+  
+if(isset($_POST["login"])){
+	$password=$_POST["password"];
+	$newpassword=$_POST["newpassword"];
 
 
-if(isset($_POST['login'])){
-$email=$_POST['email'];
-$password1=$_POST['password'];
+	$sql = mysqli_query($conn,"SELECT * FROM universal_password WHERE id='$id'") ;
+		$row=mysqli_fetch_assoc($sql); 
+		$verify=password_verify($password,$row['password']);
+	
+	$hashpassword=password_hash($newpassword,PASSWORD_BCRYPT);
 
-$sql=mysqli_query($conn,"select * from login where email ='$email'");
-$row=mysqli_fetch_array($sql);
+		if($verify==1){
+			$query=mysqli_query($conn,"UPDATE `universal_password` SET `password`='$hashpassword' WHERE id='$id'");
+      if($query){
+        // session_destroy();   // function that Destroys Session 
+        echo "<script>alert('Password Changed Successfully'),window.location='companies.php';</script>";
+      }
+		}
+		else{
+			echo"<script>alert('Invalid Password');</script>";
+		}
+	
+	}
 
-if($row>0){
-    $email=$row['email'];
-    $password=$row['password'];
-    $hashpassword=password_verify($password1,$password);
-    if($hashpassword){
-      $_SESSION['id']=$row['id'];
-      $_SESSION['name']=$row['name'];
-        $_SESSION['email']=$email;
-        $_SESSION['password']=$password;
-        header("location:index.php");
-    }else{
-        echo "<script>alert('Password is incorrect');</script>";
-    }
-}
-else{
-    echo "<script>alert('Invalid Email Id');</script>";
-}
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <title>Change Password</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -86,7 +91,7 @@ else{
 
                             <div class="card-body">
                                 <div class="">
-                                    <h2 class="mb-3 f-w-600">Login</h2>
+                                    <h2 class="mb-3 f-w-600">Universal Change Password</h2>
                                 </div>
                                 <form method="POST">
                                     <!-- <input type="hidden" name="_token" value=""> -->
@@ -94,42 +99,27 @@ else{
                                         <div class="form-group mb-3">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <div>
-                                                    <label class="form-label">Email</label>
+                                                    <label class="form-label">Old Password</label>
                                                 </div>
                                             </div>
-                                            <input id="email1" type="email" class="form-control " name="email"
-                                                placeholder="enter email..." required>
+                                            <input id="password" type="password" class="form-control " name="password"
+                                                placeholder="enter old password..." required>
                                         </div>
                                         <div class="form-group mb-3">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <div>
-                                                    <label class="form-label">Password</label>
+                                                    <label class="form-label">New Password</label>
                                                 </div>
 
                                             </div>
 
-                                            <input id="password1" type="password"  placeholder="enter password..." class="form-control "
-                                                name="password" required>
+                                            <input id="newpassword" type="password"  placeholder="enter new password..." class="form-control "
+                                                name="newpassword" required>
                                         </div>
-                                        <div class="form-group mb-4">
-                                            <div class="mb-3">
-                                                <div class="text-left">
-
-                                                    <a href=""
-                                                        class="small text-muted text-underline--dashed border-primary">
-                                                        Forgot your password?
-                                                    </a>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-
 
                                         <div class="d-grid">
                                             <button type="submit" class="btn btn-primary btn-block mt-2 login-do-btn"
-                                                id="login_button" name="login" >Login</button>
+                                                id="login_button" name="login" >Change</button>
                                         </div>
                                     </div>
                                 </form>

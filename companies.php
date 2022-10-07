@@ -364,33 +364,11 @@ if(isset($_POST['cusEdit'])){
 
     <script>
         $(document).ready(function () {
-            $('.view').click(function () {
-                let dnk = $(this).data('id');
-
-                $.ajax({
-                    url: 'cus.php',
-                    type: 'post',
-                    data: {
-                        dnk: dnk
-                    },
-                    success: function (response2) {
-                        $('.body').html(response2);
-                        $('#addNewCard').modal('show');
-                    }
-                });
-            });
-        });
-    </script>
-
-
-
-    <script>
-        $(document).ready(function () {
             $('.edit').click(function () {
                 let dnkk = $(this).data('id');
 
                 $.ajax({
-                    url: 'cus.php',
+                    url: 'cus2.php',
                     type: 'post',
                     data: {
                         dnkk: dnkk

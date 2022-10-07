@@ -1,6 +1,6 @@
 <?php
   
-  session_start();
+session_start();
 
 $clientId=$_GET['id'];
 include("include/config.php");
@@ -19,41 +19,53 @@ if(isset($_POST['add-category'])){
         echo"<script>alert('connection failed!');</script>";
      }
 }
+ 
 
 
 
-
-// if(isset($_POST['cusEdit'])){
-//     $id=$_POST['id'];
-//     $description=$_POST['description'];
-//     $client_name1=$_POST['client_name'];
-//     $mobile_no1=$_POST['mobile_no'];
-//     $apartment_type1=$_POST['apartment_type'];
-//     $area1=$_POST['area'];
-//     $status=$_POST['status'];
-//     // $status='available';
-//     $type1=$_POST['typeUpdate'];
+if(isset($_POST['cusEdit3'])){
+    $id1=$_POST['id12'];
+    $username=$_POST['username'];
+    $password=$_POST['password'];
 
 
    
    
-//     $sql="UPDATE `property` SET `client_name`='$client_name1',`mobile_no`='$mobile_no1',`apartment_type`='$apartment_type1',`area`='$area1',`status`='$status',`type1`='$type1',`description`='$description' WHERE id='$id.'";
+    $sql="UPDATE `company_details` SET `username`='$username',`password`='$password' WHERE id='$id1.'";
 
-//     if (mysqli_query($conn, $sql)){
-//       header("location:property.php");
-//    } else {
-//       echo "<script> alert ('connection failed !');window.location.href='property.php'</script>";
-//    }
-//   }
+    if (mysqli_query($conn, $sql)){
+      header("location:company-details.php?id=".$clientId."");
+   } else {
+      echo "<script> alert ('connection failed !');window.location.href='company-details.php?id=".$clientId."'</script>";
+   }
+  }
 
-//   if(isset($_GET['delid'])){
-//     $id=mysqli_real_escape_string($conn,$_GET['delid']);
-//     $sql=mysqli_query($conn,"delete from property where id='$id'");
-//     if($sql=1){
-//         header("location:property.php");
-//     }
-//     }
+  if(isset($_GET['delid'])){
+    $id=mysqli_real_escape_string($conn,$_GET['delid']);
+    $sql=mysqli_query($conn,"delete from company_details where id='$id'");
+    if($sql=1){
+        header("location:company-details.php?id=".$clientId."");    }
+    }
 ?>
+<?php
+    if(isset($_POST['deletepassword'])){
+        $checkPassword1=$_POST['checkPassword1'];
+        $id=$_POST['id1'];
+        $sql=mysqli_query($conn,"select * from universal_password");
+        while ($row=mysqli_fetch_array($sql)){ 
+          $rowPass=$row['password'];
+            $pass=password_verify($checkPassword1,$rowPass);
+            if($pass==1){
+                $sql=mysqli_query($conn,"delete from company_details where id='$id'");
+                header("location:company-details.php?id=".$clientId."");
+            }
+            else{
+                echo"<script>alert('invalid Password');</script>";
+            }
+    
+        }
+    }
+    ?>
 
 
 <!DOCTYPE html>
@@ -227,6 +239,7 @@ if(isset($_POST['add-category'])){
                                             <th>Social Media Name</th>
                                             <th>Username</th>
                                             <th>Password</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -239,8 +252,12 @@ if(isset($_POST['add-category'])){
                                             <td><?php echo $count;?></td>
                                             <td><?php echo $row['category_name']; ?></td>
                                             <td><?php echo $row['username']; ?></td>
-                                            <td><span class="hidetext"><?php echo $row['password']; ?></span>
-                                            <a data-toggle="modal" class="view_id" data-id="<?php echo $row['id']; ?>"  href="#"><i class="ml-1 text-dark far fa-eye"></i></a></td>
+                                            <td><a data-toggle="modal" class="view_id" data-id="<?php echo $row['id']; ?>"><i class="ml-1 text-dark far fa-eye"></i></a></td>
+                                            <td><a type="button" data-id="<?php echo $row['id'] ?>"
+                                                        class="edit" data-bs-toggle="modal"
+                                                        data-bs-target="#edit"><i class="ml-1 text-dark far fa-edit"></i></a>
+
+                                            <a data-toggle="modal" class="delete_id" data-id="<?php echo $row['id']; ?>"><i class="ml-1 text-dark fa fa-trash-alt"></i></a></td>
                                         </tr>
                                         <?php $count++;} ?>
                                     </tbody>
@@ -272,13 +289,43 @@ if(isset($_POST['add-category'])){
                                 <div class="col-12 form-group">
                                     <input type="hidden" name="id" id="idShow" >
                                     <label class="col-form-label" for="name">Enter Password</label>
-                                    <input type="text" class="form-control" name="checkPassword" required="">
+                                    <input type="password" class="form-control" name="checkPassword" required="">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-end">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary sub" data-toggle="modal"  name="checkPasswordBtn">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+        <div class="modal fade" id="modal-delete">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">View Password</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="post">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-12 form-group">
+                                    <input type="hidden" name="id1" id="deleteid" >
+                                    <label class="col-form-label" for="name">Enter Password</label>
+                                    <input type="password" class="form-control" name="checkPassword1" required="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-end">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary sub" data-toggle="modal"  name="deletepassword">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -316,6 +363,29 @@ if(isset($_POST['add-category'])){
             <!-- /.modal-dialog -->
         </div>
 
+                <!-- edit customer -->
+                <div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="addNewCardTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                        <h4 class="modal-title">Edit Company Details</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="addNewCardValidation" class="row gy-1 gx-2 mt-75" action="" method="post">
+
+                        <div class="modal-body px-sm-5 mx-50 pb-5 body1">
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <!--/ Edit customer -->
 
         <?php include"include/footer.php";?>
 
@@ -405,6 +475,12 @@ $(document).on('click','.view_id',function(){
     $('#idShow').val(id);
     $('#modal-default').modal('show');
 })
+$(document).on('click','.delete_id',function(){
+    let id=$(this).data('id');
+    $('#deleteid').val(id);
+    $('#modal-delete').modal('show');
+})
+
 </script>
     <script>
         $(function () {
@@ -436,6 +512,30 @@ $(document).on('click','.view_id',function(){
         });
     </script>
 
+
+
+    <script>
+        $(document).ready(function () {
+            $('.edit').click(function () {
+                let dnkk = $(this).data('id');
+
+                $.ajax({
+                    url: 'cus2.php',
+                    type: 'post',
+                    data: {
+                        dnkk: dnkk
+                    },
+                    success: function (response1) {
+                        $('.body1').html(response1);
+                        $('#editmodal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
     <?php
     if(isset($_POST['checkPasswordBtn'])){
         $checkPassword=$_POST['checkPassword'];
@@ -456,6 +556,8 @@ $(document).on('click','.view_id',function(){
         }
     }
     ?>
+
+
 </body>
 
 </html>

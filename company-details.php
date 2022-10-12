@@ -227,7 +227,7 @@ if(isset($_POST['cusEdit3'])){
 
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">DataTable with default features</h3>
+                            <h3 class="card-title">Accounts</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -308,7 +308,7 @@ if(isset($_POST['cusEdit3'])){
             <div class="modal-dialog modal-sm">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">View Password</h4>
+                        <h4 class="modal-title">Delete Password</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
